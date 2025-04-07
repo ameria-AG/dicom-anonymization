@@ -1,4 +1,42 @@
+import os
+
 import itk
+import SimpleITK as sitk
+
+def make_anonim_and_save(directory_path, output_dir):
+    """Reads a 3D DICOM volume from the specified directory."""
+    dicom_series_file_names = itk.GDCMSeriesFileNames.New()
+    dicom_series_file_names.SetDirectory(directory_path)
+    series_uids = dicom_series_file_names.GetSeriesUIDs()
+    if not series_uids:
+        raise ValueError("No DICOM series found in the specified directory.")
+    print("Series file names: " + str(dicom_series_file_names.GetFileNames(series_uids[0])))
+    series_file_names = dicom_series_file_names.GetFileNames(series_uids[0])
+    for file in series_file_names:
+        reader = sitk.ImageFileReader()
+        reader.SetFileName(file)
+        reader.LoadPrivateTagsOn()
+        reader.ReadImageInformation()
+        image = reader.Execute()
+
+        for k in image.GetMetaDataKeys():
+            if(k.startswith("0008") or k.startswith("0010")):
+                image.EraseMetaData(k)
+            #v = image.GetMetaData(k)
+            # print(f'({k}) = = "{v}"')
+            #if k == '0008|0090' or k == '0010|0010':
+            #    image.EraseMetaData(k)
+            #    print(f'Erased ({k}) = = "{v}"')
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        outFileName = os.path.join(output_dir, os.path.basename(file))
+        print("Writing: " + outFileName)
+        writer = sitk.ImageFileWriter()
+        writer.KeepOriginalImageUIDOn()
+        writer.SetFileName(outFileName)
+        writer.Execute(image)
 
 def read_image_from_dir(directory_path):
     """Reads a 3D DICOM volume from the specified directory."""

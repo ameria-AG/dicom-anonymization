@@ -4,12 +4,7 @@ import image_helper
 
 def anonymize(input_file, output_file):
     print("Anonymizing " + input_file)
-    img = image_helper.read_image_from_dir(input_file)
-    print(f"Image Size: {img.GetLargestPossibleRegion().GetSize()}")
-    print(f"Image Spacing: {img.GetSpacing()}")
-    print(f"Image Origin: {img.GetOrigin()}")
-    new_img = image_helper.create_anonymized_image(img)
-    image_helper.save_image_to_nifti(new_img, output_file)
+    image_helper.make_anonim_and_save_file(input_file, output_file)
     print("File saved to " + output_file)
 
 if __name__ == "__main__":

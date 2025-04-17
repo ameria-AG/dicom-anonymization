@@ -21,3 +21,14 @@ def make_anonim_and_save_file(dicom_file, output_dicom_file):
     writer.KeepOriginalImageUIDOn()
     writer.SetFileName(output_dicom_file)
     writer.Execute(image)
+
+def find_dicom_files_in_dir(directory):
+    reader = sitk.ImageSeriesReader()
+    series_found = reader.GetGDCMSeriesIDs(directory)
+    dicom_files = []
+    if series_found:
+        for series in series_found:
+            # Get the Dicom filename corresponding to the current series
+            dicom_files += reader.GetGDCMSeriesFileNames(directory, series)
+
+    return dicom_files

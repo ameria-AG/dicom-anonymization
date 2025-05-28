@@ -38,13 +38,6 @@ def anonymize(input, output):
         show_info(str(files_count) + " files saved to " + os.path.normpath(output))
 
 if __name__ == "__main__":
-    if (len(sys.argv) != 3):
-        print("Syntax error")
-        print("Example:")
-        print("python3 anonymizer.py path/to/inputfile.dcm path/to/outputfile.dcm")
-        print("python3 anonymizer.py path/to/input/folder path/to/output/folder")
-        sys.exit(1)
-    input = sys.argv[1]
-    output = sys.argv[2]
-
-    create_window(input, output, anonymize)
+    defaultDir = os.path.dirname(sys.executable)
+    defaultOutputDir = os.path.join(defaultDir, "Output")
+    create_window(defaultDir, defaultOutputDir, anonymize)

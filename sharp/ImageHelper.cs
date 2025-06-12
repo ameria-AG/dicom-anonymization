@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using itk.simple;
-using static System.Net.WebRequestMethods;
 
 namespace WindowsFormsApp1
 {

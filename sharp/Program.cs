@@ -33,11 +33,14 @@ namespace WindowsFormsApp1
             var pathToFile = Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory), DllName);
 
             using (var stream = assembly.GetManifestResourceStream(resourceDll))
-            using (var fileStream = File.Create(pathToFile))
-            {
-                stream.Seek(0, SeekOrigin.Begin);
-                stream.CopyTo(fileStream);
-            }
+                if (!File.Exists(pathToFile))
+                {
+                    using (var fileStream = File.Create(pathToFile))
+                    {
+                        stream.Seek(0, SeekOrigin.Begin);
+                        stream.CopyTo(fileStream);
+                    }
+                }
         }
     }
 }
